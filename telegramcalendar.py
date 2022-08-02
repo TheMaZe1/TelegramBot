@@ -1,12 +1,3 @@
-#!/usr/bin/env python3
-#
-# A library that allows to create an inline calendar keyboard.
-# grcanosa https://github.com/grcanosa
-#
-"""
-Base methods for calendar keyboard creation and processing.
-"""
-
 
 import datetime
 import calendar
@@ -15,17 +6,11 @@ import utils
 
 
 def create_callback_data(action,year,month,day):
-    """ Create the callback data associated to each button"""
+
     return 'CALENDAR' + ":" + ":".join([action,str(year),str(month),str(day)])
 
 
 def create_calendar(year=None,month=None):
-    """
-    Create an inline keyboard with the provided year and month
-    :param int year: Year to use in the calendar, if None the current year is used.
-    :param int month: Month to use in the calendar, if None the current month is used.
-    :return: Returns the InlineKeyboardMarkup object with the calendar.
-    """
     now = datetime.datetime.now()
     if year == None: year = now.year
     if month == None: month = now.month
@@ -61,14 +46,7 @@ def create_calendar(year=None,month=None):
 
 
 def process_calendar_selection(update,bot):
-    """
-    Process the callback_query. This method generates a new calendar if forward or
-    backward is pressed. This method should be called inside a CallbackQueryHandler.
-    :param telegram.Bot bot: The bot, as provided by the CallbackQueryHandler
-    :param telegram.Update update: The update, as provided by the CallbackQueryHandler
-    :return: Returns a tuple (Boolean,datetime.datetime), indicating if a date is selected
-                and returning the date if so.
-    """
+
     ret_data = (False,None)
     query = update
     # print(query)

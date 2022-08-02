@@ -1,3 +1,5 @@
+import datetime
+
 from telebot.types import CallbackQuery
 
 import telegramcalendar
@@ -5,6 +7,7 @@ from whether import check_weather_one_hour
 from keyboards import *
 from loader import *
 import telegramcalendar
+import calendar
 
 
 # Проверка зарегистрирован ли пользователь
@@ -37,6 +40,10 @@ def create_profile(message, users_d, user_id):
                     bot.send_message(message.chat.id, "Рад познакомится <b>" + users_d[user_id][1] + "</b>",
                                      parse_mode="html", reply_markup=markup_main)
                 break
+
+def create_note(message, date):
+
+    pass
 
 
 # Функция начал взаисодействия с ботом
@@ -76,13 +83,23 @@ def settings(call: CallbackQuery):
         bot.edit_message_reply_markup(call.from_user.id,call.message.id)
         mess = bot.send_message(call.from_user.id, "Введите ваше ФИ и город\nФормата: \'Ф И Г\' ")
         bot.register_next_step_handler(mess, create_profile, users_d, call.from_user.id)
+
 # @bot.callback_query_handler(func=lambda call: True)
 # def test(call: CallbackQuery):
 #     print(call.data.split(':')[0])
+
+#Обработчик календаря
 @bot.callback_query_handler(func=lambda call: call.data.split(':')[0] == "CALENDAR")
 def note_date(call: CallbackQuery):
     selected,date = telegramcalendar.process_calendar_selection(call, bot)
+    date = datetime.datetime(date.day, date.month, date.year, hour = 12, )
     print(selected,date)
+    # if(selected):
+    #     mess = "Введите время в 24-ом формате HH:MM"
+    #     bot.register_next_step_handler(mess, create_profile, users_d, call.from_user.id)
+
+
+
 
 @bot.message_handler(content_types=['text'])
 def any_text(message):

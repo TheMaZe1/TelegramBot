@@ -2,9 +2,7 @@ import requests
 import json
 from pprint import pprint
 from geopy import geocoders
-
-weather_key_AW = "VgbA35G6eTNSr4I2CmPcglLMyqv5oXGq"
-weather_key_OW = "c96a5e005acac84c24bf91f094f9c5c1"
+from loader import weather_key_AW,weather_key_OW
 
 #Определение геолпозиции человека по его городу
 def geo_pos(city: str):

@@ -1,15 +1,14 @@
-
 import datetime
 import calendar
 from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup
-import utils
-
+from loader import users_d
+from users import update_users
+from scheduler_handler import queue_scheduler
 
 def create_callback_data(action,year,month,day):
-
     return 'CALENDAR' + ":" + ":".join([action,str(year),str(month),str(day)])
 
-
+#Создание календаря для текущего месяца
 def create_calendar(year=None,month=None):
     now = datetime.datetime.now()
     if year == None: year = now.year
@@ -44,13 +43,13 @@ def create_calendar(year=None,month=None):
 
     return InlineKeyboardMarkup(keyboard)
 
-
+#Обработка нажатия кнопок в календаре
 def process_calendar_selection(update,bot):
 
     ret_data = (False,None)
     query = update
     # print(query)
-    (_,action,year,month,day) = utils.separate_callback_data(query.data)
+    (_,action,year,month,day) = query.data.split(":")
     curr = datetime.datetime(int(year), int(month), 1)
     if action == "IGNORE":
         bot.answer_callback_query(callback_query_id= query.id)
@@ -76,3 +75,23 @@ def process_calendar_selection(update,bot):
         bot.answer_callback_query(callback_query_id= query.id,text="Something went wrong!")
         # UNKNOWN
     return ret_data
+
+#создание записи в календаре
+def create_note(mess, user_id, date_orig, bot):
+    try:
+        time = mess.text[:mess.text.index(' ')]
+        note = mess.text[mess.text.index(' ') + 1:]
+        time = datetime.time(int(time[:2]), int(time[3:5]))
+        date = date_orig.combine(date_orig.date(), time)
+        if "notes" in users_d[user_id]:
+            users_d[user_id]["notes"][date] = note
+            update_users(users_d)
+            queue_scheduler.append(date)
+        else:
+            users_d[user_id]["notes"] = {date:note}
+            update_users(users_d)
+        bot.send_message(user_id, f"Хорошо, напомню вам что в {date.time()}, {date.date()}\n Нужно:{note}")
+    except Exception:
+        bot.send_message(user_id, "Формат для дибилов?, пробуй еще раз")
+        mess = bot.send_message(user_id, "Введите время в 24-ом формате HH:MM и задачу через пробел")
+        bot.register_next_step_handler(mess, create_note, user_id, date_orig,bot)

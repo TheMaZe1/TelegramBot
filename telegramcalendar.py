@@ -2,7 +2,7 @@ import datetime
 import calendar
 from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup
 from loader import users_d
-from users import update_users
+from users import update_users, logger
 from scheduler_handler import queue_scheduler
 
 def create_callback_data(action,year,month,day):
@@ -86,11 +86,13 @@ def create_note(mess, user_id, date_orig, bot):
         if "notes" in users_d[user_id]:
             users_d[user_id]["notes"][date] = note
             update_users(users_d)
-            queue_scheduler.append(date)
+            queue_scheduler.append({user_id:date})
         else:
             users_d[user_id]["notes"] = {date:note}
             update_users(users_d)
-        bot.send_message(user_id, f"Хорошо, напомню вам что в {date.time()}, {date.date()}\n Нужно:{note}")
+        bot.send_message(user_id, f"Хорошо, напомню вам что {date.strftime('%d.%m.%y В %H:%M')}\n\n Необходимо: {note}")
+        logger(f"user:{user_id}, {users_d[user_id]['name']}, {users_d[user_id]['surname']}, {users_d[user_id]['city']} adde new note: {note}\n")
+        print(f"user:{user_id}, {users_d[user_id]['name']}, {users_d[user_id]['surname']}, {users_d[user_id]['city']} adde new note: {note}\n")
     except Exception:
         bot.send_message(user_id, "Формат для дибилов?, пробуй еще раз")
         mess = bot.send_message(user_id, "Введите время в 24-ом формате HH:MM и задачу через пробел")

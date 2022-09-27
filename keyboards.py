@@ -18,7 +18,7 @@ markup_start.add(itembtn)
 
 #клавиатура под меню
 markup_menu = types.InlineKeyboardMarkup(row_width=1)
-itembtn1 = types.InlineKeyboardButton('☀️Че по погоде☁️', callback_data=menu_callback.new(button_name = "weather"))
+itembtn1 = types.InlineKeyboardButton('☀️Что по погоде☁️', callback_data=menu_callback.new(button_name = "weather"))
 itembtn2 = types.InlineKeyboardButton('⚙️Настройки⚙️', callback_data=menu_callback.new(button_name = "settings"))
 itembtn3 = types.InlineKeyboardButton('📝Ежедневник📝', callback_data=menu_callback.new(button_name = "notebook"))
 itembtn4 = types.InlineKeyboardButton('📝Расскажи мне что это📝', callback_data=menu_callback.new(button_name = "wiki"))

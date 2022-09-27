@@ -56,7 +56,7 @@ dict_weather_2 = {
     "13d":"\U00002744",
     "50d":"\U0001F32B"
 }
-#Определение геолпозиции человека по его городу
+#Определение геопозиции человека по его городу
 def geo_pos(city: str):
     try:
         geolocator = geocoders.Nominatim(user_agent="telebot")
@@ -78,7 +78,6 @@ def get_wether_AW(latitude,longitude, token):
             f'http://dataservice.accuweather.com/forecasts/v1/hourly/1hour/{location_code}?apikey={token}&language=ru&metric=True&details=true')
         data = r.json()
         #оформление готового вывода информации о погоде
-        print(data[0]['WeatherIcon'])
         response = \
             (f"🌡 За окном: {round(data[0]['Temperature']['Value'])} C°\n"
              f"{dict_weather[str(data[0]['WeatherIcon'])]} {data[0]['IconPhrase']}\n"
@@ -106,10 +105,8 @@ def check_weather_one_hour(city: str):
     else:
         try:
             return get_wether_AW(ll[0],ll[1],weather_key_AW)
-        except Exception as ex:
-            print(ex)
+        except Exception:
             try:
                 return get_weather_OW(ll[0],ll[1],weather_key_OW)
-            except Exception as ex:
-                print(ex)
+            except Exception:
                 return "Что то пошло не так. Я не могу определить погоду😥"

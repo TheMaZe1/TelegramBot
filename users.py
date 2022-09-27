@@ -7,8 +7,6 @@ def update_users(users_d):
     with open('saved_users.pkl', 'wb') as f:  #
         pickle.dump(users_d, f)
 
-
-
 #Создание пользовател и сохранение его в базе
 def create_profile(message, users_d, user_id):
     mes = message.text.split()
@@ -41,5 +39,5 @@ def check_user(user_id):
         return True
 
 def logger(text):
-    with open("log.txt", "a") as f:
+    with open("log.txt", "a",encoding="UTF-8") as f:
         f.write(str(datetime.now()) +": "+text+"\n")

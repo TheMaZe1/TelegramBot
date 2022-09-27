@@ -17,7 +17,7 @@ citats_dict = [
 
 
 #Отправка приветсвенного сообщения пользователю
-def hello_user(message, user_id):
+def hello_user(user_id):
     bot.send_message(user_id, f"Здравствуйте <b>" + users_d[user_id]["name"] + f"</b>. {hello_words[random.randint(0,len(hello_words)-1)]}"
                                 f"\nЧем займемся?🙃",
                      parse_mode="html", reply_markup=markup_menu)
@@ -31,7 +31,6 @@ def begin_message(user_id):
     bot.send_message(user_id,
                          "Здраствуйте, я Джарвис, бот помощник.\n"
                          "К сожалению мы с вами еще не знакомы, давайте заполним информацию")
-
     mess = bot.send_message(user_id, "Введите ваши Фамилию, имя и город\nФормат для ввода: \'Ф И Г\'")
     return mess
 

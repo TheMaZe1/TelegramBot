@@ -6,7 +6,6 @@ wikipedia.set_lang("ru")
 
 def get_info(mess):
     req = mess.text
-    print(req)
     try:
         page = wikipedia.page(req)
         m = page.summary

@@ -9,15 +9,14 @@ from wiki import get_info
 
 # Функция начала взаимодействия с ботом
 # Проверяет есть ли пользователь в базе
-# Если нет знакомится, иначе приветсвует
-
+# Если нет знакомится, иначе приветствует
 @bot.message_handler(commands=['start'])
 def start(message):
     user_id = message.from_user.id
     if (not (check_user(user_id))):
         bot.register_next_step_handler(begin_message(user_id), create_profile, users_d, user_id)
     else:
-        hello_user(message, user_id)
+        hello_user(user_id)
 
 
 @bot.callback_query_handler(func=lambda call: call.data.split(':')[0] == "menu")
@@ -75,7 +74,6 @@ def notes(call: CallbackQuery):
 @bot.callback_query_handler(func=lambda call: call.data.split(':')[0] == "CALENDAR")
 def note_date(call: CallbackQuery):
     selected, date = telegramcalendar.process_calendar_selection(call, bot)
-    print(selected, date)
     if (selected):
         bot.edit_message_reply_markup(call.from_user.id, call.message.id)
         mess = bot.send_message(call.from_user.id, "Введите время в 24-ом формате HH:MM и задачу через пробел")
@@ -88,7 +86,7 @@ def any_text(message):
         if (message.from_user.id not in users_d):
             bot.send_message(message.from_user.id, "Нажмите старт", reply_markup=markup_start)
         else:
-            hello_user(message, message.from_user.id)
+            hello_user(message.from_user.id)
     else:
         text(message.from_user.id)
 
